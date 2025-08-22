@@ -29,7 +29,7 @@ const ALUNOS = [
     },
 ]
 
-//*****GET******/
+//***************GET*****************/
 app.get("/",(req, res)=>{
     res.json({
         mensagem: "Hello World"
@@ -67,7 +67,7 @@ app.get("/alunos/cor/:cor", (req, res) => {
     }
 })
 
-//*****POST*********/
+//********************POST*************************/
 app.post("/alunos", (req, res)=>{
     const {nome, cor, idade} = req.body;
 
@@ -86,7 +86,22 @@ app.post("/alunos", (req, res)=>{
     res.status(201).json({ mensagem: "Aluno criado com sucesso"})
 })
 
-    app.listen(PORT, ()=>{
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
+app.delete("/alunos/:id", (req, res)=>{
+    const id = Number(req.params.id);
+    const indice = ALUNOS.findIndex(aluno => aluno.id === id )
+    
+    if( indice === -1){
+        return res.status(404).json({
+            mensagem : "Aluno não encontrado ou já  foi deletado."
+        })
+    }
+    console.log(indice)
+    ALUNOS.splice(indice, 1);
+    res.status(204).json({ mensagem: "Deletado com sucesso!"});
+})
+
+
+app.listen(PORT, ()=>{
+console.log(`Servidor rodando em http://localhost:${PORT}`);
 })
 
