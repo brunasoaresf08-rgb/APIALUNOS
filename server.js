@@ -29,6 +29,7 @@ const ALUNOS = [
     },
 ]
 
+//*****GET******/
 app.get("/",(req, res)=>{
     res.json({
         mensagem: "Hello World"
@@ -65,6 +66,26 @@ app.get("/alunos/cor/:cor", (req, res) => {
         res.status(404).json({ msg: "Nenhum aluno encontrado com essa cor"})
     }
 })
+
+//*****POST*********/
+app.post("/alunos", (req, res)=>{
+    const {nome, cor, idade} = req.body;
+
+    if(!nome || !cor || !idade){
+        return res.status(400).json({ mensagem: "Nome, cor e idade são obrigatórios"})
+    }
+    
+    const id = ALUNOS.length > 0 ? ALUNOS[ALUNOS.length - 1].id + 1 : 1
+    
+    const novoAluno = {
+        id, nome, cor, idade
+    }
+
+    console.log(novoAluno)
+    ALUNOS.push(novoAluno)
+    res.status(201).json({ mensagem: "Aluno criado com sucesso"})
+})
+
     app.listen(PORT, ()=>{
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 })
